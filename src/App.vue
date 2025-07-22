@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import TestComponent from './views/TestComponent.vue';
+import test from './views/test.vue';
 </script>
 
 <template>
-<div>
-  <TestComponent />
-</div>
+  <div>
+    <test />
+  </div>
 </template>
 
-<style scoped>
-
+<style lang="scss">
+* {
+  padding: 0;
+  margin: 0;
+}
 </style>
