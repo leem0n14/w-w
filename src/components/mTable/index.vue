@@ -1,54 +1,31 @@
 <template>
-    <div class="m_table">
-        <div class="m_table_header"></div>
-        <div class="m_table_body">
-            <el-table :data="tableData">
-                <el-table-column v-for="column in tableColumns" :key="column.prop" :prop="column.prop"
-                    :label="column.label"></el-table-column>
+    <div>
+        <div class="m-table-header">{{ $attrs.title }}</div>
+        <div class="m-table-body">
+            <el-table>
+
             </el-table>
         </div>
+        <div class="m-table-footer"></div>
     </div>
 </template>
 
-<script setup lang="ts">
-import { ref, defineProps, onMounted } from 'vue';
-import type { ElTable, ElTableColumn } from 'element-plus';
-import type { IMTableProps, TableRow } from './types/mTable';
+<script lang="ts" setup>
+import { defineProps, defineEmits, defineExpose, withDefaults } from 'vue'
+import type { IMTable } from './types/mTable.d.ts'
 
 
-const props = defineProps({
-    autoData: {
-        type: Boolean,
-        default: false
-    },
-    dataUrl: {
-        type: String,
-        default: ''
-    },
-    tableColumns: {
-        type: Array as () => IMTableProps['tableColumns'],
-        default: () => []
-    }
-});
-const tableData = ref<TableRow[]>([]);
-const fetchData = async () => {
-    if (props.autoData && props.dataUrl) {
-        // 自动获取数据
-        const response = await fetch(props.dataUrl);
-        const data = await response.json();
-        console.log(data);
+const props = withDefaults(defineProps<IMTable.IProps>(), {
+    columnsConfig: () => [],
+    title: '',
+})
+const emits = defineEmits<IMTable.IEmits>()
 
-        tableData.value = data;
-    }
-};
+const fetchData = () => {
+    console.log('fetch')
+}
 
-onMounted(() => {
-    fetchData();
-});
-
-defineExpose({
-    tableData,
+defineExpose(<IMTable.IExpose>{
     fetchData
-});
-
+})
 </script>

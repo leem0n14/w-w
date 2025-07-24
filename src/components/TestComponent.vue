@@ -8,4 +8,4 @@ import { ref } from 'vue'
 const num = ref(1)
 </script>
 <style scoped>
-</style>
+</style>·

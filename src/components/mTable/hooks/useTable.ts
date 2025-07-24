@@ -1,38 +1,28 @@
-// src/hooks/useTable.ts
 import mTable from "../index.vue";
-import { ref, type FunctionalComponent, nextTick, h } from "vue";
-import type { IMTableProps } from "../types/mTable";
+import { ref, h, type FunctionalComponent ,onMounted} from "vue";
+import type { IMTable } from "../types/mTable.d.ts";
+export function useTable() {
+  // 直接使用 IMTable.IProps 作为 props 类型
+  type TableProps = IMTable.IProps;
 
-export default function useTable() {
-  type TableInstance = InstanceType<typeof mTable>;
-  const tableRef = ref<TableInstance | null>(null);
+  // 通过proxyRef创建一个响应式的mTable实例
 
-  const getTableInstance = async () => {
-    await nextTick();
-    if (!tableRef.value) {
-      throw new Error("表格实例未初始化");
-    }
-    return tableRef.value;
-  };
-
-  const tableMethods = new Proxy(
-    {},
-    {
-      get(_, method: keyof TableInstance) {
-        return async (...args: any[]) => {
-          const instance = await getTableInstance();
-          return instance[method]?.(...args);
-        };
-      },
-    }
-  );
-
-  const TableComponent: FunctionalComponent<IMTableProps> = (
+  // 定义一个函数式组件，用于渲染 MTable 组件
+  const mTableRender: FunctionalComponent<TableProps> = (
     props,
     { attrs, slots }
   ) => {
-    return h(mTable, { ...props, ...attrs, ref: tableRef }, slots);
+    return h(
+      mTable,
+      {
+        ...props,
+        ...attrs,
+      },
+      slots
+    );
   };
 
-  return [TableComponent, tableMethods] as const;
+  mTableRender.displayName = "MTableRenderer";
+
+  return [mTableRender];
 }

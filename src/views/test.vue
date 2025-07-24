@@ -1,16 +1,17 @@
 <template>
-    <div class="page">
-        <mTable autoData dataUrl="http://localhost:3000/table" :tableColumns="tableColumns"></mTable>
+    <div class="page" >
+        <mTable title="as" :columnsConfig="tableColumns" ></mTable>
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useTable } from '@/components/mTable';
 const tableColumns = ref([
     { prop: 'id', label: 'ID', width: 100, align: 'center' },
     { prop: 'name', label: 'Name', minWidth: 150, align: 'left' },
 ]);
-const [mTable, mTableMethod] = useTable();
+const [mTable] = useTable();
+
 </script>
 
 <style lang="scss" scoped>
