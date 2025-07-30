@@ -1,17 +1,19 @@
 <template>
-    <div class="page" >
-        <mTable title="as" :columnsConfig="tableColumns" ></mTable>
+    <div class="page">
+        <mTable title="My Table" :columnsConfig="tableColumns" :data-url="'http://localhost:3000/table'"></mTable>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
-import { useTable } from '@/components/mTable';
-const tableColumns = ref([
-    { prop: 'id', label: 'ID', width: 100, align: 'center' },
-    { prop: 'name', label: 'Name', minWidth: 150, align: 'left' },
+import { ref, onMounted } from 'vue';
+import { useTable, type IMTable } from '@/components/mTable';
+const tableColumns = ref<IMTable.Columns[]>([
+    { name: 'id', index: 'id', width: 100 },
+    { name: '姓名', index: 'name' },
 ]);
-const [mTable] = useTable();
-
+const [mTable, mMethods] = useTable();
+onMounted(() => {
+    mMethods.fetchData()
+})
 </script>
 
 <style lang="scss" scoped>
